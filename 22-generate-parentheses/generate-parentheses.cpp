@@ -1,27 +1,28 @@
 class Solution {
- public:
-  vector<string> generateParenthesis(int n) {
-    vector<string> ans;
-    dfs(n, n, "", ans);
-    return ans;
-  }
+private:
+    void solve(int open, int close, int n, string& curr, vector<string>& ans){
+        if(open == n && close == n){
+            ans.push_back(curr);
+            return;
+        } 
 
- private:
-  void dfs(int l, int r, string&& path, vector<string>& ans) {
-    if (l == 0 && r == 0) {
-      ans.push_back(path);
-      return;
-    }
+        if(open < n){
+            curr.push_back('(');
+            solve(open+1, close, n, curr, ans);
+            curr.pop_back();
+        }
 
-    if (l > 0) {
-      path.push_back('(');
-      dfs(l - 1, r, std::move(path), ans);
-      path.pop_back();
+        if(close < open){
+            curr.push_back(')');
+            solve(open, close+1, n, curr, ans);
+            curr.pop_back();
+        }
     }
-    if (l < r) {
-      path.push_back(')');
-      dfs(l, r - 1, std::move(path), ans);
-      path.pop_back();
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> ans;
+        string curr;
+        solve(0, 0, n, curr, ans);
+        return ans;
     }
-  }
 };
