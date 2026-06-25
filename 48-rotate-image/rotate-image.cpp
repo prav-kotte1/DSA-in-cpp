@@ -1,11 +1,19 @@
 class Solution {
 public:
     void rotate(vector<vector<int>>& matrix) {
-        ranges::reverse(matrix);
-        for (int i = 0; i < matrix.size(); ++i){
-            for (int j = i + 1; j < matrix.size(); ++j){
+        //transpose + reverse(row) = 90
+        //reverse(row) + reverse(col) = 180
+        //transpose + reverse(col) = 270
+
+        int n = matrix.size();
+        for(int i=0; i<n; i++){
+            for(int j=i+1; j<n; j++){
                 swap(matrix[i][j], matrix[j][i]);
-            }               
-        }     
+            }
+        }
+
+        for(int i=0; i<n; i++){
+            reverse(matrix[i].begin(), matrix[i].end());
+        }
     }
 };
