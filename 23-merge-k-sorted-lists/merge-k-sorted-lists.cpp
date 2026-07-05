@@ -1,42 +1,27 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
 class Solution {
 public:
-    ListNode* merge(ListNode* head1, ListNode* head2) {
-        ListNode *t1 = head1;
-        ListNode* t2 = head2;
-        ListNode dummy(-1);
-        ListNode* temp = &dummy;
-        while (t1 != NULL && t2 != NULL) {
-            if (t1->val < t2->val) {
-                temp->next = t1;
-                t1 = t1->next;
-            } else {
-                temp->next = t2;
-                t2 = t2->next;
-            }
-            temp = temp->next;
+    struct compare {
+        bool operator()(ListNode* a, ListNode* b) {
+            return a->val > b->val;
         }
-        if (t1)
-            temp->next = t1;
-        else
-            temp->next = t2;
-        return dummy.next;
-    }
+    };
+    
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        if(lists.empty()) return nullptr;
-        ListNode* head = lists[0];
-        for (int i = 1; i < lists.size(); i++) {
-            head = merge(head, lists[i]);
+        priority_queue<ListNode*, vector<ListNode*>, compare> pq;
+        for (auto l : lists) {
+            if (l) pq.push(l);
         }
-        return head;
+        
+        ListNode* dummy = new ListNode(0);
+        ListNode* tail = dummy;
+        
+        while (!pq.empty()) {
+            ListNode* curr = pq.top();
+            pq.pop();
+            tail->next = curr;
+            tail = tail->next;
+            if (curr->next) pq.push(curr->next);
+        }
+        return dummy->next;
     }
 };
