@@ -5,14 +5,15 @@ public:
         for(int num:nums){
             freq[num]++;
         }
-        vector<pair<int,int>> arr;
+        priority_queue<pair<int,int>> pq;
         for(auto& it: freq){
-            arr.push_back({it.second, it.first}); //freq, element
+            pq.push({it.second, it.first}); //freq, element
         }
-        sort(arr.begin(), arr.end(), greater<pair<int, int>>());
+
         vector<int> res;
-        for(int i=0; i<k; i++){
-            res.push_back(arr[i].second);
+        while(k--){
+            res.push_back(pq.top().second);
+            pq.pop();
         }
         return res;
     }
